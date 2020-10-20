@@ -1,11 +1,62 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
+from numpy import sign
+#from nameko.rpc import rpc
+#from nameko.standalone.rpc import ClusterRpcProxy
 
-app = FastAPI()
+class eliminate(BaseModel):
+    A:list
+    b:list
 
-@app.get("/")
+class interpolation(BaseModel):
+    x:int
+    xi:list
+    yi:list
+
+class differentiation(BaseModel):
+    h:float
+    p:int
+
+class integration(BaseModel):
+    a:int
+    b:int
+
+class rootFinding(BaseModel):
+    a:float
+    b:float
+    dx:float
+    
+    
+
+app = FastAPI() # FlaskApp()
+
+@app.get('/')
 def home():
-    return {"message": "hello World"}
+    return {"message": "This is Fask API"}
 
+#broker_cfg = {'AMQP_URI': "amqp://guest:guest@rabbitmq"}
+origins = [
+    "*",
+    "http://localhost",
+    "http://localhost:80",
+    "http://localhost:8000",
+    "http://localhost:8000/b2s",
+    "http://localhost:8000/elimination",
+    "http://localhost:8000/interpolation",
+    "http://localhost:8000/differentiation",
+    "http://localhost:8000/integration",
+    "http://localhost:8000/root-finding"
+
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/b2s/{text}")
 def bit2int(text:str):
