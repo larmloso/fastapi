@@ -10,3 +10,7 @@ def home():
 @app.get("/main")
 def home():
     return {"abc": "hello World"}
+
+@app.get("/home")
+def home():
+    return {"abc": "hello World"}
